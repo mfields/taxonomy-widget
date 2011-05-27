@@ -1,11 +1,12 @@
 <?php
 /*
-Plugin Name: Taxonomy Widget
-Plugin URI: http://wordpress.org/extend/plugins/taxonomy-widget/
-Description: Display taxonomy terms in your sidebar.
-Version: 0.4
-Author: Michael Fields
-Author URI: http://wordpress.mfields.org/
+Plugin Name:    Taxonomy Widget
+Plugin URI:     http://wordpress.org/extend/plugins/taxonomy-widget/
+Description:    Display taxonomy terms in your sidebar.
+Version:        0.4
+Author:         Michael Fields
+Author URI:     http://wordpress.mfields.org/
+
 Copyright 2009-2010  Michael Fields  michael@mfields.org
 
 This program is free software; you can redistribute it and/or modify
