@@ -21,16 +21,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/**
-* Wrapper function for print_r()
-*/
-if( !function_exists( 'pr' ) ) {
-	function pr( $var ) {
-		print '<pre>' . print_r( $var, true ) . '</pre>';
-	}
-}
 
 add_action( 'widgets_init', create_function( '', 'return register_widget( "mfields_taxonomy_widget" );' ) );
+
 
 class mfields_taxonomy_widget extends WP_Widget {
 	static $listeners = array();
