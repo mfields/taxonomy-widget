@@ -54,17 +54,17 @@ class mfields_taxonomy_widget extends WP_Widget {
 			'dropdown' => __( 'Dropdown', 'mfields-taxonomy-widget' ),
 			'cloud'    => __( 'Cloud', 'mfields-taxonomy-widget' )
 			);
-		
+
 		/* Get all public taxonomies. */
 		$this->taxonomies = (array) get_taxonomies( array( 'public' => true ), 'objects' );
-		
+
 		/* Custom CSS is for logged-in users only. */
 		if ( current_user_can( 'edit_theme_options' ) ) {
 			add_action( 'admin_head-widgets.php', array( &$this, 'css_admin' ) );
 			add_action( 'admin_head-widgets.php', array( &$this, 'css_dialog' ) );
 			add_action( 'wp_head', array( &$this, 'css_dialog' ) );
 		}
-		
+
 		/* Javascript listeners for dropdowns. */
 		add_action( 'wp_footer', array( &$this, 'listeners_print' ) );
 	}
@@ -103,7 +103,7 @@ EOF;
 	}
 	function listeners_print() {
 		$url = get_option( 'home' );
-		
+
 		$listeners = array();
 		foreach ( self::$listeners as $id ) {
 			$listeners[] = 'document.getElementById( "' . $id . '" ).onchange = changeTaxonomy;';
@@ -113,10 +113,14 @@ EOF;
 print <<<EOF
 <script type='text/javascript'>
 /* <![CDATA[ */
-function changeTaxonomy( e, query_var ) {
-    if ( this.options[this.selectedIndex].value != 0 && this.options[this.selectedIndex].value != -1 ) {
-        location.href = "{$url}/?" + this.name + "=" + this.options[this.selectedIndex].value;
-      }
+function changeTaxonomy() {
+	if ( 0 == this.options[this.selectedIndex].value ) {
+		return;
+	}
+	if ( 0 == this.options[this.selectedIndex].value ) {
+		return;
+	}
+	location.href = this.options[this.selectedIndex].value;
 }
 $listeners
 /* ]]> */
@@ -165,7 +169,7 @@ EOF;
 		 * wp_parse_args() works much like array_merge() only the argument order is reversed.
 		 */
 		$args = wp_parse_args( $args, $this->default_args );
-		
+
 		$clean = array();
 		foreach ( (array) $args as $key => $value ) {
 			switch ( $key ) {
@@ -199,12 +203,11 @@ EOF;
 		return $clean;
 	}
 	function widget( $args, $instance ) {
-		
 		extract( $args );
 		extract( $this->clean_args( $instance ) );
-		
+
 		$taxonomy_object = get_taxonomy( $taxonomy );
-		
+
 		/* Taxonomy does not support clouds. Display an error message to logged in users with sufficient permissions to fix the problem. */
 		if ( 'cloud' == $template && isset( $taxonomy_object->show_tagcloud ) && empty( $taxonomy_object->show_tagcloud ) ) {
 			if ( current_user_can( 'edit_theme_options' ) ) {
@@ -220,31 +223,26 @@ EOF;
 			}
 			return;
 		}
-		
+
 		$title = apply_filters( 'widget_title', $title );
-		
+
 		print $before_widget;
-		
+
 		if ( ! empty( $title ) ) {
 			print $before_title . $title . $after_title;
 		}
-		
+
 		$taxonomy_args = apply_filters( 'mfields_taxonomy_widget_args_global', array(
 			'orderby'      => 'name',
 			'show_count'   => $count,
 			'hierarchical' => $hierarchical,
 			'taxonomy'     => $taxonomy
 			) );
-		
-	#	$taxonomy_args['number'] = 3;           /* absint() */
-	#	$taxonomy_args['order'] = 'DESC';        /* enumeration: ASC, DESC */
-	#	$taxonomy_args['orderby'] = 'count';    /* enumeration: name, count, term_group, slug, nothing[aka term-ID] */
-		
-		
+
 		switch ( $template ) {
-			
+
 			case 'dropdown' :
-				
+
 				/* Automatically select the appropriate term when that term is being queried. */
 				$selected = '';
 				global $wp_query;
@@ -252,7 +250,7 @@ EOF;
 				if ( isset( $queried_object->slug ) ) {
 					$selected = $queried_object->slug;
 				}
-				
+
 				/*
 				 * Localized text to display when no option has been selected.
 				 * Allow users to filter globally and with taxonomy context.
@@ -261,7 +259,24 @@ EOF;
 				$show_option_none = apply_filters( 'taxonomy-widget-show-option-none', $show_option_none );
 				$show_option_none = apply_filters( 'taxonomy-widget-show-option-none-' . $taxonomy, $show_option_none );
 				$show_option_none = esc_attr( $show_option_none );
+
+				/* Calculate current item. */
+				$current_term = null;
+				if ( is_category() ) {
+					$current_term = get_term_by( 'slug', get_query_var( 'category_name' ), 'category' );
+				}
+				else if ( is_tag() ) {
+					$current_term = get_term_by( 'slug', get_query_var( 'tag' ), 'post_tag' );
+				}
+				else if ( is_tax() ) {
+					$current_term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
+				}
 				
+				$selected = null;
+				if ( isset( $current_term->taxonomy ) ) {
+					$selected = get_term_link( $current_term, $current_term->taxonomy );
+				}
+
 				/* Arguments specific to wp_dropdown_categories(). */
 				$dropdown_args = array(
 					'id'               => $this->get_field_id( 'mfields_taxonomy_widget_dropdown_wrapper' ),
@@ -270,22 +285,22 @@ EOF;
 					'selected'         => $selected,
 					'show_option_none' => $show_option_none
 					);
-				
+
 				/* Merge arguments. */
 				$args = array_merge( $taxonomy_args, $dropdown_args );
-				
+
 				/* Print the select element. */
 				wp_dropdown_categories( $args );
-				
+
 				/* Log the widget's html id attribute. */
 				$this->listeners_add( $args['id'] );
-				
+
 				break;
-				
+
 			case 'cloud' :
 				wp_tag_cloud( apply_filters( 'mfields_taxonomy_widget_args_cloud', $taxonomy_args ) );
 				break;
-				
+
 			case 'ol' :
 			case 'ul' : 
 			default :
@@ -335,17 +350,24 @@ EOF;
 	}
 }
 
-/* Forked version of Walker_CategoryDropdown */
+
+/* Custom version of Walker_CategoryDropdown */
 class Mfields_Walker_Taxonomy_Dropdown extends Walker {
+	var $db_fields = array(
+		'id'     => 'term_id',
+		'parent' => 'parent'
+		);
+
 	var $tree_type = 'category';
-	var $db_fields = array ('parent' => 'parent', 'id' => 'term_id');
-	
+
 	function start_el( &$output, $term, $depth, $args ) {
+		$url = get_term_link( $term, $term->taxonomy );
+
 		$selected = '';
-		if ( $term->slug == $args['selected'] ) {
+		if ( $url == $args['selected'] ) {
 			$selected .= ' selected="selected"';
 		}
-		
+
 		$text = str_repeat( '&nbsp;', $depth * 3 ) . $term->name;
 		if ( $args['show_count'] ) {
 			$text .= '&nbsp;&nbsp;('. $term->count .')';
@@ -353,7 +375,9 @@ class Mfields_Walker_Taxonomy_Dropdown extends Walker {
 		if ( $args['show_last_update'] ) {
 			$text .= '&nbsp;&nbsp;' . gmdate( __( 'Y-m-d', 'mfields-taxonomy-widget' ), $term->last_update_timestamp );
 		}
-		
-		$output.= "\t" . '<option' . $selected . ' class="level-' . $depth . '" value="' . esc_attr( $term->slug ) . '">' . esc_html( $text ) . '</option>' . "\n";
+
+		$class_name = 'level-' . $depth;
+
+		$output.= "\t" . '<option' . $selected . ' class="' . esc_attr( $class_name ) . '" value="' . esc_url( $url ) . '">' . esc_html( $text ) . '</option>' . "\n";
 	}
 }
