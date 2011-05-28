@@ -262,7 +262,7 @@ EOF;
 				 * Localized text to display when no option has been selected.
 				 * Allow users to filter globally and with taxonomy context.
 				 */
-				$show_option_none = esc_html__( 'Please Choose', 'mfields-taxonomy-widget' );
+				$show_option_none = __( 'Please Choose', 'mfields-taxonomy-widget' );
 				$show_option_none = apply_filters( 'taxonomy-widget-show-option-none', $show_option_none );
 				$show_option_none = apply_filters( 'taxonomy-widget-show-option-none-' . $taxonomy, $show_option_none );
 				$show_option_none = esc_attr( $show_option_none );
