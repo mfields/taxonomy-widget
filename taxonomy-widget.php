@@ -35,12 +35,12 @@ class Mfields_Taxonomy_Widget extends WP_Widget {
 	var $javascript_has_been_printed = false;
 	var $event_handlers = array();
 	var $default_args = array(
-		'title'         => '',
-		'display_title' => 1,
 		'count'         => 0,
+		'display_title' => 1,
 		'hierarchical'  => 0,
-		'template'      => 'ul',
 		'taxonomy'      => 'category'
+		'template'      => 'ul',
+		'title'         => '',
 		);
 	function Mfields_Taxonomy_Widget() {
 
@@ -52,10 +52,10 @@ class Mfields_Taxonomy_Widget extends WP_Widget {
 
 		/* Supported templates. */
 		$this->templates = array (
-			'ul'       => __( 'Unordered List', 'mfields-taxonomy-widget' ),
-			'ol'       => __( 'Ordered List', 'mfields-taxonomy-widget' ),
-			'dropdown' => __( 'Dropdown', 'mfields-taxonomy-widget' ),
 			'cloud'    => __( 'Cloud', 'mfields-taxonomy-widget' )
+			'dropdown' => __( 'Dropdown', 'mfields-taxonomy-widget' ),
+			'ol'       => __( 'Ordered List', 'mfields-taxonomy-widget' ),
+			'ul'       => __( 'Unordered List', 'mfields-taxonomy-widget' ),
 			);
 
 		/* Get all public taxonomies. */
@@ -240,9 +240,9 @@ EOF;
 		}
 
 		$taxonomy_args = apply_filters( 'mfields_taxonomy_widget_args_global', array(
+			'hierarchical' => $hierarchical,
 			'orderby'      => 'name',
 			'show_count'   => $count,
-			'hierarchical' => $hierarchical,
 			'taxonomy'     => $taxonomy
 			) );
 
@@ -288,9 +288,9 @@ EOF;
 				$dropdown_args = array(
 					'id'               => $this->get_field_id( 'mfields_taxonomy_widget_dropdown_wrapper' ),
 					'name'             => $taxonomy_object->query_var,
-					'walker'           => new Mfields_Walker_Taxonomy_Dropdown(),
 					'selected'         => $selected,
-					'show_option_none' => $show_option_none
+					'show_option_none' => $show_option_none,
+					'walker'           => new Mfields_Walker_Taxonomy_Dropdown(),
 					);
 
 				/* Merge arguments. */
