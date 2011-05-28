@@ -52,7 +52,7 @@ class Mfields_Taxonomy_Widget extends WP_Widget {
 
 		/* Supported templates. */
 		$this->templates = array (
-			'cloud'    => __( 'Cloud', 'mfields-taxonomy-widget' )
+			'cloud'    => __( 'Cloud', 'mfields-taxonomy-widget' ),
 			'dropdown' => __( 'Dropdown', 'mfields-taxonomy-widget' ),
 			'ol'       => __( 'Ordered List', 'mfields-taxonomy-widget' ),
 			'ul'       => __( 'Unordered List', 'mfields-taxonomy-widget' ),
