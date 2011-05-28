@@ -38,7 +38,7 @@ class Mfields_Taxonomy_Widget extends WP_Widget {
 		'count'         => 0,
 		'display_title' => 1,
 		'hierarchical'  => 0,
-		'taxonomy'      => 'category'
+		'taxonomy'      => 'category',
 		'template'      => 'ul',
 		'title'         => '',
 		);
