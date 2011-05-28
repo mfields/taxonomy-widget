@@ -35,18 +35,18 @@ class Mfields_Taxonomy_Widget extends WP_Widget {
 	var $javascript_has_been_printed = false;
 	var $event_handlers = array();
 	var $default_args = array(
-		'title'               => '',
-		'display_title'       => 1,
-		'count'               => 0,
-		'hierarchical'        => 0,
-		'template'            => 'ul',
-		'taxonomy'            => 'category'
+		'title'         => '',
+		'display_title' => 1,
+		'count'         => 0,
+		'hierarchical'  => 0,
+		'template'      => 'ul',
+		'taxonomy'      => 'category'
 		);
 	function Mfields_Taxonomy_Widget() {
 
 		/* Configuration. */
 		$this->WP_Widget( 'taxonomy', __( 'Taxonomy', 'mfields-taxonomy-widget' ), array(
-			'classname' => 'widget_taxonomy',
+			'classname'   => 'widget_taxonomy',
 			'description' => __( 'Create a list, dropdown or term cloud of any taxonomy.', 'mfields-taxonomy-widget' )
 			) );
 
@@ -135,8 +135,8 @@ EOF;
 		foreach( $this->templates as $name => $label ) {
 			$id = $this->get_field_id( 'template' ) . '-' . $name;
 			$checked = ( $name === $template ) ? ' checked="checked"' : '';
-			$o.= "\n\t" . '<input' . $checked . ' type="radio" name="' . $this->get_field_name( 'template' ) . '" value="' . $name . '" id="' . $id . '" />';
-			$o.= "\n\t" . '<label for="' . $id . '">' . $label . '</label><br />';
+			$o.= "\n\t" . '<input' . $checked . ' type="radio" name="' . esc_attr( $this->get_field_name( 'template' ) ) . '" value="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" />';
+			$o.= "\n\t" . '<label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . '</label><br />';
 		}
 		$o.= "\n\t" . '</fieldset>';
 		return $o;
@@ -156,8 +156,8 @@ EOF;
 			}
 		}
 		if ( ! empty( $options ) ) {
-			$o.= "\n\t" . '<label class="heading" for="' . $id . '">' . esc_html__( 'Choose Taxonomy to Display:', 'mfields-taxonomy-widget' ) . '</label>';
-			$o.= "\n\t" . '<select name="' . $name . '" id="' . $id . '" class="widefat">';
+			$o.= "\n\t" . '<label class="heading" for="' . esc_attr( $id ) . '">' . esc_html__( 'Choose Taxonomy to Display:', 'mfields-taxonomy-widget' ) . '</label>';
+			$o.= "\n\t" . '<select name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" class="widefat">';
 			$o.= implode( '', $options );
 			$o.= "\n\t" . '</select>';
 		}
@@ -211,13 +211,17 @@ EOF;
 
 		$taxonomy_object = get_taxonomy( $taxonomy );
 
-		/* Taxonomy does not support clouds. Display an error message to logged in users with sufficient permissions to fix the problem. */
+		/* Taxonomy does not support clouds.
+		 * Display an error message to logged in
+		 * users with sufficient permissions to
+		 * fix the problem.
+		 */
 		if ( 'cloud' == $template && isset( $taxonomy_object->show_tagcloud ) && empty( $taxonomy_object->show_tagcloud ) ) {
 			if ( current_user_can( 'edit_theme_options' ) ) {
 				print '<div class="dialog mfields-taxonomy-widget-error">';
 				print $before_title . sprintf( esc_html__( 'Taxonomy Widget Error', 'mfields-taxonomy-widget' ) ) . $after_title;
 				if ( isset( $taxonomy_object->label ) && ! empty( $taxonomy_object->label ) ) {
-					printf( esc_html__( 'Term clouds are not supported for the %1$s taxonomy.', 'mfields-taxonomy-widget' ), $taxonomy_object->label );
+					printf( esc_html__( 'Term clouds are not supported for the &#8220;%1$s&#8221; taxonomy.', 'mfields-taxonomy-widget' ), $taxonomy_object->label );
 				}
 				else {
 					printf( esc_html__( 'Term clouds are not supported for this taxonomy.', 'mfields-taxonomy-widget' ) );
@@ -307,7 +311,10 @@ EOF;
 			case 'ol' :
 			case 'ul' : 
 			default :
-				$tag = ( $template === 'ol' ) ? 'ol' : 'ul';
+				$tag = 'ul';
+				if ( $template == 'ol' ) {
+					$tag = 'ol';
+				}
 				print "\n\t" . '<' . $tag . '>';
 				$taxonomy_args['title_li'] = '';
 				wp_list_categories( apply_filters( 'mfields_taxonomy_widget_args_list', $taxonomy_args ) );
@@ -325,8 +332,8 @@ EOF;
 		print "\n\t" . '<div class="mfields-taxonomy-widget-admin">';
 
 		/* TITLE */
-		print "\n\t" . '<p><label for="' . $this->get_field_id('title') . '" class="heading">' . esc_html__( 'Title:', 'mfields-taxonomy-widget' ) . '</label>';
-		print "\n\t" . '<input class="widefat" id="' . $this->get_field_id('title') . '" name="' . $this->get_field_name('title') . '" type="text" value="' . $title . '" /></p>';
+		print "\n\t" . '<p><label for="' . esc_attr( $this->get_field_id( 'title' ) ) . '" class="heading">' . esc_html__( 'Title:', 'mfields-taxonomy-widget' ) . '</label>';
+		print "\n\t" . '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" type="text" value="' . esc_attr( $title ) . '" /></p>';
 
 		/* TAXONOMY */
 		print $this->get_taxonomy_control( $taxonomy );
@@ -337,16 +344,16 @@ EOF;
 		print "\n\t" . '<fieldset><legend>' . esc_html__( 'Advanced Options', 'mfields-taxonomy-widget' ) . '</legend>';
 
 		/* DISPLAY TITLE */
-		print "\n\t" . '<input type="checkbox" class="checkbox" id="' . $this->get_field_id( 'display_title' ) . '" name="' . $this->get_field_name( 'display_title' ) . '"' . checked( $display_title, true, false ) . ' />';
-		print "\n\t" . '<label for="' . $this->get_field_id( 'display_title' ) . '">' . esc_html__( 'Display Title', 'mfields-taxonomy-widget' ) . '</label><br />';
+		print "\n\t" . '<input type="checkbox" class="checkbox" id="' . esc_attr( $this->get_field_id( 'display_title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'display_title' ) ) . '"' . checked( $display_title, true, false ) . ' />';
+		print "\n\t" . '<label for="' . esc_attr( $this->get_field_id( 'display_title' ) ) . '">' . esc_html__( 'Display Title', 'mfields-taxonomy-widget' ) . '</label><br />';
 
 		/* COUNT */
-		print "\n\t" . '<input type="checkbox" class="checkbox" id="' . $this->get_field_id( 'count' ) . '" name="' . $this->get_field_name( 'count' ) . '"' . checked( $count, true, false ) . ' />';
-		print "\n\t" . '<label for="' . $this->get_field_id( 'count' ) . '">' . esc_html__( 'Show post counts', 'mfields-taxonomy-widget' ) . '</label><br />';
+		print "\n\t" . '<input type="checkbox" class="checkbox" id="' . esc_attr( $this->get_field_id( 'count' ) ) . '" name="' . esc_attr( $this->get_field_name( 'count' ) ) . '"' . checked( $count, true, false ) . ' />';
+		print "\n\t" . '<label for="' . esc_attr( $this->get_field_id( 'count' ) ) . '">' . esc_html__( 'Show post counts', 'mfields-taxonomy-widget' ) . '</label><br />';
 
 		/* HEIRARCHICAL */
-		print "\n\t" . '<input type="checkbox" class="checkbox" id="' . $this->get_field_id( 'hierarchical' ) . '" name="' . $this->get_field_name( 'hierarchical' ) . '"' . checked( $hierarchical, true, false ) . ' />';
-		print "\n\t" . '<label for="' . $this->get_field_id( 'hierarchical' ) . '">' . esc_html__( 'Show hierarchy', 'mfields-taxonomy-widget' ) . '</label>';
+		print "\n\t" . '<input type="checkbox" class="checkbox" id="' . esc_attr( $this->get_field_id( 'hierarchical' ) ) . '" name="' . esc_attr( $this->get_field_name( 'hierarchical' ) ) . '"' . checked( $hierarchical, true, false ) . ' />';
+		print "\n\t" . '<label for="' . esc_attr( $this->get_field_id( 'hierarchical' ) ) . '">' . esc_html__( 'Show hierarchy', 'mfields-taxonomy-widget' ) . '</label>';
 
 		print "\n\t" . '</fieldset>';
 		print "\n\t" . '</div>';
