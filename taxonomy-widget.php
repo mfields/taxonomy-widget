@@ -278,7 +278,7 @@ EOF;
 				else if ( is_tax() ) {
 					$current_term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
 				}
-				
+
 				$selected = null;
 				if ( isset( $current_term->taxonomy ) ) {
 					$selected = get_term_link( $current_term, $current_term->taxonomy );
