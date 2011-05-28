@@ -22,10 +22,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 
-add_action( 'widgets_init', create_function( '', 'return register_widget( "mfields_taxonomy_widget" );' ) );
+function mfields_taxonomy_widget_register_widget() {
+	register_widget( 'Mfields_Taxonomy_Widget' );
+}
+add_action( 'widgets_init', 'mfields_taxonomy_widget_register_widget' );
 
 
-class mfields_taxonomy_widget extends WP_Widget {
+class Mfields_Taxonomy_Widget extends WP_Widget {
 	static $listeners = array();
 	var $templates = array();
 	var $taxonomies = array();
@@ -39,14 +42,14 @@ class mfields_taxonomy_widget extends WP_Widget {
 		'template'            => 'ul',
 		'taxonomy'            => 'category'
 		);
-	function mfields_taxonomy_widget() {
-		
+	function Mfields_Taxonomy_Widget() {
+
 		/* Configuration. */
 		$this->WP_Widget( 'taxonomy', __( 'Taxonomy', 'mfields-taxonomy-widget' ), array(
 			'classname' => 'widget_taxonomy',
 			'description' => __( 'Create a list, dropdown or term cloud of any taxonomy.', 'mfields-taxonomy-widget' )
 			) );
-		
+
 		/* Supported templates. */
 		$this->templates = array (
 			'ul'       => __( 'Unordered List', 'mfields-taxonomy-widget' ),
