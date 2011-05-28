@@ -3,7 +3,7 @@
 Plugin Name:    Taxonomy Widget
 Plugin URI:     http://wordpress.org/extend/plugins/taxonomy-widget/
 Description:    Display taxonomy terms in your sidebar.
-Version:        0.4
+Version:        0.5
 Author:         Michael Fields
 Author URI:     http://wordpress.mfields.org/
 

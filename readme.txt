@@ -45,7 +45,12 @@ If you find that this plugin is has a bug, does not play nicely with other plugi
 
 ==Changelog==
 
+= 0.5 =
+* Better escaping throughout.
+* Use get_term_link() for javascript redircts.
+
 = 0.4 =
+* Never officially released.
 * Dropped support for 2.9 branch.
 * Removed mfields_walk_taxonomy_dropdown_tree().
 * Removed mfields_dropdown_taxonomy_terms().
