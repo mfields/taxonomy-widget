@@ -183,10 +183,8 @@ EOF;
 
 		$taxonomy_object = get_taxonomy( $taxonomy );
 
-		/* Taxonomy does not support clouds.
-		 * Display an error message to logged in
-		 * users with sufficient permissions to
-		 * fix the problem.
+		/*
+		 * Return early if taxonomy does not support clouds.
 		 */
 		if ( 'cloud' == $template && isset( $taxonomy_object->show_tagcloud ) && empty( $taxonomy_object->show_tagcloud ) ) {
 			if ( current_user_can( 'edit_theme_options' ) ) {
