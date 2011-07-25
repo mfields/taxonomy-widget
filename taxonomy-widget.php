@@ -141,8 +141,7 @@ EOF;
 		$o = "\n\t" . '<fieldset><legend>' . esc_html__( 'Display Taxonomy As:', 'mfields-taxonomy-widget' ) . '</legend>';
 		foreach( $this->templates as $name => $label ) {
 			$id = $this->get_field_id( 'template' ) . '-' . $name;
-			$checked = ( $name === $template ) ? ' checked="checked"' : '';
-			$o.= "\n\t" . '<input' . $checked . ' type="radio" name="' . esc_attr( $this->get_field_name( 'template' ) ) . '" value="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" />';
+			$o.= "\n\t" . '<input type="radio" name="' . esc_attr( $this->get_field_name( 'template' ) ) . '" value="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" ' . checked( $name, $template, false ) . ' />';
 			$o.= "\n\t" . '<label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . '</label><br />';
 		}
 		$o.= "\n\t" . '</fieldset>';
