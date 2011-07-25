@@ -155,12 +155,8 @@ EOF;
 		$name    = $this->get_field_name( 'taxonomy' );
 		$options = array();
 		foreach ( $this->taxonomies as $slug => $taxonomy ) {
-			$selected = '';
-			if ( $slug == $selected_taxonomy ) {
-				$selected = ' selected="selected"';
-			}
 			if ( isset( $taxonomy->label ) && ! empty( $taxonomy->label ) ) {
-				$options[] = "\n\t" . '<option' . $selected . ' value="' . esc_attr( $slug ) . '">' . esc_html( $taxonomy->label ) . '</option>';
+				$options[] = "\n\t" . '<option value="' . esc_attr( $slug ) . '" ' . selected( $slug, $selected_taxonomy, false ) . '>' . esc_html( $taxonomy->label ) . '</option>';
 			}
 		}
 		if ( ! empty( $options ) ) {
