@@ -53,7 +53,7 @@ class Mfields_Taxonomy_Widget extends WP_Widget {
 		$this->WP_Widget( 'taxonomy', __( 'Taxonomy', 'mfields-taxonomy-widget' ), array(
 			'classname'   => 'widget_taxonomy',
 			'description' => __( 'Create a list, dropdown or term cloud of any taxonomy.', 'mfields-taxonomy-widget' )
-			) );
+		) );
 
 		/* Supported templates. */
 		$this->templates = array (
