@@ -230,7 +230,7 @@ EOF;
 				print '<div class="dialog mfields-taxonomy-widget-error">';
 				print $before_title . sprintf( esc_html__( 'Taxonomy Widget Error', 'mfields-taxonomy-widget' ) ) . $after_title;
 				if ( isset( $taxonomy_object->label ) && ! empty( $taxonomy_object->label ) ) {
-					printf( esc_html__( 'Term clouds are not supported for the &#8220;%1$s&#8221; taxonomy.', 'mfields-taxonomy-widget' ), $taxonomy_object->label );
+					printf( esc_html__( 'Term clouds are not supported for &#8220;%1$s&#8221;.', 'mfields-taxonomy-widget' ), $taxonomy_object->label );
 				}
 				else {
 					printf( esc_html__( 'Term clouds are not supported for this taxonomy.', 'mfields-taxonomy-widget' ) );
