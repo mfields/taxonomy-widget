@@ -95,8 +95,9 @@ EOF;
 	margin:1em;
 	border:.25em dotted #acd2e5;
 	background-color:#bfeaff;
+	width:100%;
 }
-.dialog.mfields-taxonomy-widget-error    { background-color:#ffd9d9; border-color:#e5b8b8 }
+.dialog.mfields-taxonomy-widget-error    { background-color:#ffd9d9; border-color:#e5b8b8; }
 .dialog.mfields-notice   { background-color:#fffabf; border-color:#f2e76d }
 .dialog.mfields-success  { background-color:#bfffc5; border-color:#a3d9a7 }
 </style>
