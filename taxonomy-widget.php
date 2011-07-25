@@ -22,10 +22,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 
-function mfields_taxonomy_widget_register_widget() {
+function mfields_taxonomy_widget_register() {
+	$taxonomies = get_taxonomies( array( 'public' => true ), 'objects' );
+	if ( empty( $taxonomies ) ) {
+		return;
+	}
 	register_widget( 'Mfields_Taxonomy_Widget' );
 }
-add_action( 'widgets_init', 'mfields_taxonomy_widget_register_widget' );
+add_action( 'widgets_init', 'mfields_taxonomy_widget_register' );
 
 
 class Mfields_Taxonomy_Widget extends WP_Widget {
