@@ -42,6 +42,7 @@ class Mfields_Taxonomy_Widget extends WP_Widget {
 		'template'      => 'ul',
 		'title'         => '',
 		);
+
 	function Mfields_Taxonomy_Widget() {
 
 		/* Configuration. */
@@ -71,6 +72,7 @@ class Mfields_Taxonomy_Widget extends WP_Widget {
 		/* Javascript listeners for dropdowns. */
 		add_action( 'wp_footer', array( &$this, 'listeners_print' ) );
 	}
+
 	function css_admin() {
 		print <<<EOF
 <style type="text/css">
@@ -84,6 +86,7 @@ class Mfields_Taxonomy_Widget extends WP_Widget {
 </style>
 EOF;
 	}
+
 	function css_dialog() {
 		print <<<EOF
 <style type="text/css">
@@ -99,11 +102,13 @@ EOF;
 </style>
 EOF;
 	}
+
 	function listeners_add( $id ) {
 		if ( isset( $id ) && ! in_array( $id, self::$listeners ) ) {
 			self::$listeners[] = $id;
 		}
 	}
+
 	function listeners_print() {
 		$url = get_option( 'home' );
 
@@ -130,6 +135,7 @@ $listeners
 </script>
 EOF;
 	}
+
 	function get_template_control( $template ) {
 		$o = "\n\t" . '<fieldset><legend>' . esc_html__( 'Display Taxonomy As:', 'mfields-taxonomy-widget' ) . '</legend>';
 		foreach( $this->templates as $name => $label ) {
@@ -141,6 +147,7 @@ EOF;
 		$o.= "\n\t" . '</fieldset>';
 		return $o;
 	}
+
 	function get_taxonomy_control( $selected_taxonomy ) {
 		$o       = '';
 		$id      = $this->get_field_id( 'taxonomy' );
@@ -166,6 +173,7 @@ EOF;
 		}
 		return $o;
 	}
+
 	function clean_args( $args ) {
 		/*
 		 * Merge $args into defaults.
@@ -205,6 +213,7 @@ EOF;
 		}
 		return $clean;
 	}
+
 	function widget( $args, $instance ) {
 		extract( $args );
 		extract( $this->clean_args( $instance ) );
@@ -323,9 +332,11 @@ EOF;
 		}
 		print $after_widget;
 	}
+
 	function update( $new_instance, $old_instance ) {
 		return $this->clean_args( $new_instance );
 	}
+
 	function form( $instance ) {
 		extract( $this->clean_args( $instance ) );
 
