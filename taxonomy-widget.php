@@ -137,39 +137,6 @@ $listeners
 EOF;
 	}
 
-	function get_template_control( $template ) {
-		$o = "\n\t" . '<fieldset><legend>' . esc_html__( 'Display Taxonomy As:', 'mfields-taxonomy-widget' ) . '</legend>';
-		foreach( $this->templates as $name => $label ) {
-			$id = $this->get_field_id( 'template' ) . '-' . $name;
-			$o.= "\n\t" . '<input type="radio" name="' . esc_attr( $this->get_field_name( 'template' ) ) . '" value="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" ' . checked( $name, $template, false ) . ' />';
-			$o.= "\n\t" . '<label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . '</label><br />';
-		}
-		$o.= "\n\t" . '</fieldset>';
-		return $o;
-	}
-
-	function get_taxonomy_control( $selected_taxonomy ) {
-		$o       = '';
-		$id      = $this->get_field_id( 'taxonomy' );
-		$name    = $this->get_field_name( 'taxonomy' );
-		$options = array();
-		foreach ( $this->taxonomies as $slug => $taxonomy ) {
-			if ( isset( $taxonomy->label ) && ! empty( $taxonomy->label ) ) {
-				$options[] = "\n\t" . '<option value="' . esc_attr( $slug ) . '" ' . selected( $slug, $selected_taxonomy, false ) . '>' . esc_html( $taxonomy->label ) . '</option>';
-			}
-		}
-		if ( ! empty( $options ) ) {
-			$o.= "\n\t" . '<label class="heading" for="' . esc_attr( $id ) . '">' . esc_html__( 'Choose Taxonomy to Display:', 'mfields-taxonomy-widget' ) . '</label>';
-			$o.= "\n\t" . '<select name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" class="widefat">';
-			$o.= implode( '', $options );
-			$o.= "\n\t" . '</select>';
-		}
-		else {
-			$o = '<div class="dialog mfields-taxonomy-widget-error">' . esc_html__( 'No taxonomies could be found.', 'mfields-taxonomy-widget' ) . '</div>';
-		}
-		return $o;
-	}
-
 	function clean_args( $args ) {
 		/*
 		 * Merge $args into defaults.
@@ -313,27 +280,53 @@ EOF;
 
 		print "\n\t" . '<div class="mfields-taxonomy-widget-admin">';
 
-		/* TITLE */
+		/*
+		 * Widget Title.
+		 */
 		print "\n\t" . '<p><label for="' . esc_attr( $this->get_field_id( 'title' ) ) . '" class="heading">' . esc_html__( 'Title:', 'mfields-taxonomy-widget' ) . '</label>';
 		print "\n\t" . '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" type="text" value="' . esc_attr( $title ) . '" /></p>';
 
-		/* TAXONOMY */
-		print $this->get_taxonomy_control( $taxonomy );
+		/*
+		 * Choose a Taxonomy.
+		 */
+		$id = $this->get_field_id( 'taxonomy' );
+		print "\n\t" . '<label class="heading" for="' . esc_attr( $id ) . '">' . esc_html__( 'Choose Taxonomy to Display:', 'mfields-taxonomy-widget' ) . '</label>';
+		print "\n\t" . '<select name="' . esc_attr( $this->get_field_name( 'taxonomy' ) ) . '" id="' . esc_attr( $id ) . '" class="widefat">';
+		foreach ( $this->taxonomies as $slug => $taxonomy ) {
+			if ( isset( $taxonomy->label ) && ! empty( $taxonomy->label ) ) {
+				print "\n\t" . '<option value="' . esc_attr( $slug ) . '" ' . selected( $slug, $instance['taxonomy'], false ) . '>' . esc_html( $taxonomy->label ) . '</option>';
+			}
+		}
+		print "\n\t" . '</select>';
 
-		/* TEMPLATE */
-		print $this->get_template_control( $template );
+		/*
+		 * Display Taxonomy As.
+		 */
+		print "\n\t" . '<fieldset><legend>' . esc_html__( 'Display Taxonomy As:', 'mfields-taxonomy-widget' ) . '</legend>';
+		foreach( $this->templates as $name => $label ) {
+			$id = $this->get_field_id( 'template' ) . '-' . $name;
+			print "\n\t" . '<input type="radio" name="' . esc_attr( $this->get_field_name( 'template' ) ) . '" value="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" ' . checked( $name, $template, false ) . ' />';
+			print "\n\t" . '<label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . '</label><br />';
+		}
+		print  "\n\t" . '</fieldset>';
 
 		print "\n\t" . '<fieldset><legend>' . esc_html__( 'Advanced Options', 'mfields-taxonomy-widget' ) . '</legend>';
 
-		/* DISPLAY TITLE */
+		/*
+		 * Display Title?
+		 */
 		print "\n\t" . '<input type="checkbox" class="checkbox" id="' . esc_attr( $this->get_field_id( 'display_title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'display_title' ) ) . '"' . checked( $display_title, true, false ) . ' />';
 		print "\n\t" . '<label for="' . esc_attr( $this->get_field_id( 'display_title' ) ) . '">' . esc_html__( 'Display Title', 'mfields-taxonomy-widget' ) . '</label><br />';
 
-		/* COUNT */
+		/*
+		 * Show Post Counts?
+		 */
 		print "\n\t" . '<input type="checkbox" class="checkbox" id="' . esc_attr( $this->get_field_id( 'count' ) ) . '" name="' . esc_attr( $this->get_field_name( 'count' ) ) . '"' . checked( $count, true, false ) . ' />';
 		print "\n\t" . '<label for="' . esc_attr( $this->get_field_id( 'count' ) ) . '">' . esc_html__( 'Show post counts', 'mfields-taxonomy-widget' ) . '</label><br />';
 
-		/* HEIRARCHICAL */
+		/*
+		 * Show Hierarchy?
+		 */
 		print "\n\t" . '<input type="checkbox" class="checkbox" id="' . esc_attr( $this->get_field_id( 'hierarchical' ) ) . '" name="' . esc_attr( $this->get_field_name( 'hierarchical' ) ) . '"' . checked( $hierarchical, true, false ) . ' />';
 		print "\n\t" . '<label for="' . esc_attr( $this->get_field_id( 'hierarchical' ) ) . '">' . esc_html__( 'Show hierarchy', 'mfields-taxonomy-widget' ) . '</label>';
 
