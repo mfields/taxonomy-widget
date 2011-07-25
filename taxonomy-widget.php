@@ -259,38 +259,16 @@ EOF;
 
 			case 'dropdown' :
 
-				/* Automatically select the appropriate term when that term is being queried. */
-				$selected = '';
-				global $wp_query;
-				$queried_object = $wp_query->get_queried_object();
-				if ( isset( $queried_object->slug ) ) {
-					$selected = $queried_object->slug;
-				}
+				$term = get_queried_object();
 
-				/*
-				 * Localized text to display when no option has been selected.
-				 * Allow users to filter globally and with taxonomy context.
-				 */
 				$show_option_none = __( 'Please Choose', 'mfields-taxonomy-widget' );
 				$show_option_none = apply_filters( 'taxonomy-widget-show-option-none', $show_option_none );
 				$show_option_none = apply_filters( 'taxonomy-widget-show-option-none-' . $taxonomy, $show_option_none );
 				$show_option_none = esc_attr( $show_option_none );
 
-				/* Calculate current item. */
-				$current_term = null;
-				if ( is_category() ) {
-					$current_term = get_term_by( 'slug', get_query_var( 'category_name' ), 'category' );
-				}
-				else if ( is_tag() ) {
-					$current_term = get_term_by( 'slug', get_query_var( 'tag' ), 'post_tag' );
-				}
-				else if ( is_tax() ) {
-					$current_term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
-				}
-
 				$selected = null;
-				if ( isset( $current_term->taxonomy ) ) {
-					$selected = get_term_link( $current_term, $current_term->taxonomy );
+				if ( isset( $term->taxonomy ) ) {
+					$selected = get_term_link( $term, $term->taxonomy );
 				}
 
 				/* Arguments specific to wp_dropdown_categories(). */
@@ -302,13 +280,10 @@ EOF;
 					'walker'           => new Mfields_Walker_Taxonomy_Dropdown(),
 					);
 
-				/* Merge arguments. */
 				$args = array_merge( $taxonomy_args, $dropdown_args );
 
-				/* Print the select element. */
 				wp_dropdown_categories( $args );
 
-				/* Log the widget's html id attribute. */
 				$this->listeners_add( $args['id'] );
 
 				break;
