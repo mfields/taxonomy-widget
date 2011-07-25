@@ -61,10 +61,18 @@ class Mfields_Taxonomy_Widget extends WP_Widget {
 			'dropdown' => __( 'Dropdown', 'mfields-taxonomy-widget' ),
 			'ol'       => __( 'Ordered List', 'mfields-taxonomy-widget' ),
 			'ul'       => __( 'Unordered List', 'mfields-taxonomy-widget' ),
-			);
+		);
 
 		/* Get all public taxonomies. */
-		$this->taxonomies = (array) get_taxonomies( array( 'public' => true ), 'objects' );
+		$this->taxonomies = get_taxonomies( array( 'public' => true ), 'objects' );
+		if ( empty( $this->taxonomies ) ) {
+			return;
+		}
+
+		$taxonomies = array_keys( $this->taxonomies );
+		if ( ! in_array( 'category', $taxonomies ) ) {
+			$this->default_args['taxonomy'] = $taxonomies[0];
+		}
 
 		/* Custom CSS is for logged-in users only. */
 		if ( current_user_can( 'edit_theme_options' ) ) {
