@@ -53,6 +53,9 @@ I've released a handfull of plugins dealing with taxonomies. Please see my [plug
 
 ==Changelog==
 
+= 0.6.1 =
+* Set value of the "taxonomies" property a bit later in the action sequence. 
+
 = 0.6 =
 * Cleanup.
 * Provide alternative default if categories are disabled.
