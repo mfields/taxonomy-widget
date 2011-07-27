@@ -1,9 +1,10 @@
 Taxonomy Widget
+===============
 
 By [Michael Fields](http://wordpress.mfields.org/)
 
-Requires WordPress: 3.2
-Tested up to: 3.2.1
+Tested up to WordPress version 3.2.1
+
 
 About
 -----
