@@ -42,6 +42,7 @@ class Mfields_Taxonomy_Widget extends WP_Widget {
 		'count'         => 0,
 		'display_title' => 1,
 		'hierarchical'  => 0,
+		'show_empty' 	=> 0, // Added to support hide_empty option...
 		'taxonomy'      => 'category',
 		'template'      => 'ul',
 		'title'         => '',
@@ -231,6 +232,8 @@ EOF;
 			'hierarchical' => $hierarchical,
 			'orderby'      => 'name',
 			'show_count'   => $count,
+			'hide_empty'   => !($show_empty), // Checkbox is off by default, but hide_empty should be true by default...
+			'use_desc_for_title'	=> false, // Hate this little used default setting!
 			'taxonomy'     => $taxonomy
 			) );
 
@@ -238,16 +241,49 @@ EOF;
 
 			case 'dropdown' :
 
-				$term = get_queried_object();
-
 				$show_option_none = __( 'Please Choose', 'mfields-taxonomy-widget' );
 				$show_option_none = apply_filters( 'taxonomy-widget-show-option-none', $show_option_none );
 				$show_option_none = apply_filters( 'taxonomy-widget-show-option-none-' . $taxonomy, $show_option_none );
 				$show_option_none = esc_attr( $show_option_none );
 
+				// This only returns a single queried taxonomy, the last one in the query string...
+				// $term = get_queried_object();
+				
+				/*
+				WORKS:
+				http://example.com/tax1/tagA/?tax2=tabB
+				
+				DOES NOT WORK:
+				http://example.com/tax1/tagA/?tax1=tagB		...redirects to /tax1/tagB/
+				http://example.com/tax1/tagA+tagB			...tagA AND tagB
+				http://example.com/tax1/tagA,tagB			...tagA OR tagB
+				
+				EXAMPLE:
+				print_r($wp_query->query_vars);
+				
+				Array (
+					[tax1] => tagA			<-- /tax1/tagA/
+					[tax2] => tagB			<-- ?tax1=tagB
+					[tax3] => tagC			<-- &tax3=tagC
+					[tax1] => tagA+tagB		<-- tagA AND tagB
+					[tax1] => tagA,tagB		<-- tagA OR tagB
+					[error] => 
+					[m] => 0
+					...
+
+				*/
 				$selected = null;
+				if (get_query_var($taxonomy)) {
+					$term = get_term_by('slug', get_query_var($taxonomy), $taxonomy); // by 'slug', 'name', or 'id' 
+				}
+				
 				if ( isset( $term->taxonomy ) ) {
-					$selected = get_term_link( $term, $term->taxonomy );
+					$selected = get_term_link( $term, $term->taxonomy ); // For wp_dropdown_categories() with custom walker...
+				} else {
+					$term = get_queried_object(); // Fallback, just in case...
+					if ( isset( $term->taxonomy ) ) {
+						$selected = get_term_link( $term, $term->taxonomy );
+					}
 				}
 
 				/* Arguments specific to wp_dropdown_categories(). */
@@ -256,7 +292,7 @@ EOF;
 					'name'             => $taxonomy_object->query_var,
 					'selected'         => $selected,
 					'show_option_none' => $show_option_none,
-					'walker'           => new Mfields_Walker_Taxonomy_Dropdown(),
+					'walker'           => new Mfields_Walker_Taxonomy_Dropdown()
 					);
 
 				$args = array_merge( $taxonomy_args, $dropdown_args );
@@ -280,6 +316,20 @@ EOF;
 				}
 				print "\n\t" . '<' . $tag . '>';
 				$taxonomy_args['title_li'] = '';
+
+				if (get_query_var($taxonomy)) {
+					$term = get_term_by('slug', get_query_var($taxonomy), $taxonomy); // by 'slug', 'name', or 'id' 
+				}
+				
+				if ( isset( $term->taxonomy ) ) {
+					$taxonomy_args['current_category'] = $term->term_id; // For wp_list_categories()
+				} else {					
+					$term = get_queried_object(); // Fallback, just in case...
+					if ( isset( $term->taxonomy ) ) {
+						$taxonomy_args['current_category'] = $term->term_id;
+					}
+				}
+				
 				wp_list_categories( apply_filters( 'mfields_taxonomy_widget_args_list', $taxonomy_args ) );
 				print "\n\t" . '</' . $tag . '>';
 				break;
@@ -339,6 +389,12 @@ EOF;
 		 */
 		print "\n\t" . '<input type="checkbox" class="checkbox" id="' . esc_attr( $this->get_field_id( 'count' ) ) . '" name="' . esc_attr( $this->get_field_name( 'count' ) ) . '"' . checked( $count, true, false ) . ' />';
 		print "\n\t" . '<label for="' . esc_attr( $this->get_field_id( 'count' ) ) . '">' . esc_html__( 'Show post counts', 'mfields-taxonomy-widget' ) . '</label><br />';
+
+		/*
+		 * Show Empty Categories?
+		 */
+		print "\n\t" . '<input type="checkbox" class="checkbox" id="' . esc_attr( $this->get_field_id( 'show_empty' ) ) . '" name="' . esc_attr( $this->get_field_name( 'show_empty' ) ) . '"' . checked( $show_empty, true, false ) . ' />';
+		print "\n\t" . '<label for="' . esc_attr( $this->get_field_id( 'show_empty' ) ) . '">' . esc_html__( 'Show empty categories', 'mfields-taxonomy-widget' ) . '</label><br />';
 
 		/*
 		 * Show Hierarchy?
