@@ -63,17 +63,6 @@ class Mfields_Taxonomy_Widget extends WP_Widget {
 			'ul'       => __( 'Unordered List', 'mfields-taxonomy-widget' ),
 		);
 
-		/* Get all public taxonomies. */
-		$this->taxonomies = get_taxonomies( array( 'public' => true ), 'objects' );
-		if ( empty( $this->taxonomies ) ) {
-			return;
-		}
-
-		$taxonomies = array_keys( $this->taxonomies );
-		if ( ! in_array( 'category', $taxonomies ) ) {
-			$this->default_args['taxonomy'] = $taxonomies[0];
-		}
-
 		/* Custom CSS is for logged-in users only. */
 		if ( current_user_can( 'edit_theme_options' ) ) {
 			add_action( 'admin_head-widgets.php', array( &$this, 'css_admin' ) );
@@ -81,8 +70,25 @@ class Mfields_Taxonomy_Widget extends WP_Widget {
 			add_action( 'wp_head', array( &$this, 'css_dialog' ) );
 		}
 
-		/* Javascript listeners for dropdowns. */
+		add_action( 'wp_loaded', array( &$this, 'set_taxonomies' ) );
 		add_action( 'wp_footer', array( &$this, 'listeners_print' ) );
+	}
+
+	/**
+	 * Set the "taxonomies" property.
+	 *
+	 * Value should contain all public taxonomies registered with WordPress.
+	 * This function should fire sometime after the 'init' hook.
+	 *
+	 * @since      0.6.1
+	 */
+	public function set_taxonomies() {
+		$this->taxonomies = get_taxonomies( array( 'public' => 1 ), 'objects' );
+
+		$names = array_keys( $this->taxonomies );
+		if ( ! in_array( 'category', $names ) ) {
+			$this->default_args['taxonomy'] = $names[0];
+		}
 	}
 
 	function css_admin() {
