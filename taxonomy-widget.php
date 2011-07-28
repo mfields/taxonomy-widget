@@ -279,7 +279,7 @@ EOF;
 				break;
 
 			case 'ol' :
-			case 'ul' : 
+			case 'ul' :
 			default :
 				$tag = 'ul';
 				if ( $template == 'ol' ) {
