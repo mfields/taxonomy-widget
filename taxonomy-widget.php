@@ -246,32 +246,6 @@ EOF;
 				$show_option_none = apply_filters( 'taxonomy-widget-show-option-none-' . $taxonomy, $show_option_none );
 				$show_option_none = esc_attr( $show_option_none );
 
-				// This only returns a single queried taxonomy, the last one in the query string...
-				// $term = get_queried_object();
-				
-				/*
-				WORKS:
-				http://example.com/tax1/tagA/?tax2=tabB
-				
-				DOES NOT WORK:
-				http://example.com/tax1/tagA/?tax1=tagB		...redirects to /tax1/tagB/
-				http://example.com/tax1/tagA+tagB			...tagA AND tagB
-				http://example.com/tax1/tagA,tagB			...tagA OR tagB
-				
-				EXAMPLE:
-				print_r($wp_query->query_vars);
-				
-				Array (
-					[tax1] => tagA			<-- /tax1/tagA/
-					[tax2] => tagB			<-- ?tax1=tagB
-					[tax3] => tagC			<-- &tax3=tagC
-					[tax1] => tagA+tagB		<-- tagA AND tagB
-					[tax1] => tagA,tagB		<-- tagA OR tagB
-					[error] => 
-					[m] => 0
-					...
-
-				*/
 				$selected = null;
 				if (get_query_var($taxonomy)) {
 					$term = get_term_by('slug', get_query_var($taxonomy), $taxonomy); // by 'slug', 'name', or 'id' 
