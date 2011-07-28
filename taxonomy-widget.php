@@ -220,6 +220,17 @@ EOF;
 			return;
 		}
 
+		$queried_terms = get_query_var( $taxonomy_object->query_var );
+
+		if ( ! empty( $queried_terms ) ) {
+			if ( false !== strpos( $queried_terms, ',' ) ) {
+				$queried_terms = explode( ',', $queried_terms );
+			}
+			else if ( false !== strpos( $queried_taxonomy, '+' ) ) {
+				$queried_terms = explode( '+', $queried_terms );
+			}
+		}
+
 		$title = apply_filters( 'widget_title', $title );
 
 		print $before_widget;
@@ -245,21 +256,6 @@ EOF;
 				$show_option_none = apply_filters( 'taxonomy-widget-show-option-none', $show_option_none );
 				$show_option_none = apply_filters( 'taxonomy-widget-show-option-none-' . $taxonomy, $show_option_none );
 				$show_option_none = esc_attr( $show_option_none );
-
-				$selected = null;
-				if ( get_query_var( $taxonomy ) ) {
-					$term = get_term_by( 'slug', get_query_var( $taxonomy ), $taxonomy );
-				}
-				
-				if ( isset( $term->taxonomy ) ) {
-					$selected = get_term_link( $term, $term->taxonomy );
-				}
-				else {
-					$term = get_queried_object();
-					if ( isset( $term->taxonomy ) ) {
-						$selected = get_term_link( $term, $term->taxonomy );
-					}
-				}
 
 				/* Arguments specific to wp_dropdown_categories(). */
 				$dropdown_args = array(
@@ -292,19 +288,10 @@ EOF;
 				print "\n\t" . '<' . $tag . '>';
 				$taxonomy_args['title_li'] = '';
 
-				if (get_query_var($taxonomy)) {
-					$term = get_term_by('slug', get_query_var($taxonomy), $taxonomy); // by 'slug', 'name', or 'id' 
-				}
-				
-				if ( isset( $term->taxonomy ) ) {
-					$taxonomy_args['current_category'] = $term->term_id; // For wp_list_categories()
-				} else {					
-					$term = get_queried_object(); // Fallback, just in case...
-					if ( isset( $term->taxonomy ) ) {
-						$taxonomy_args['current_category'] = $term->term_id;
-					}
-				}
-				
+				/**
+				 * @todo create a custom walker for this that will
+				 * recognize an array for the "selected" argument.
+				 */
 				wp_list_categories( apply_filters( 'mfields_taxonomy_widget_args_list', $taxonomy_args ) );
 				print "\n\t" . '</' . $tag . '>';
 				break;
