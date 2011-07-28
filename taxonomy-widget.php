@@ -261,7 +261,7 @@ EOF;
 				$dropdown_args = array(
 					'id'               => $this->get_field_id( 'mfields_taxonomy_widget_dropdown_wrapper' ),
 					'name'             => $taxonomy_object->query_var,
-					'selected'         => $selected,
+					'selected'         => $queried_terms,
 					'show_option_none' => $show_option_none,
 					'walker'           => new Mfields_Walker_Taxonomy_Dropdown()
 					);
