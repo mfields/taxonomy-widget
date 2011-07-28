@@ -247,14 +247,15 @@ EOF;
 				$show_option_none = esc_attr( $show_option_none );
 
 				$selected = null;
-				if (get_query_var($taxonomy)) {
-					$term = get_term_by('slug', get_query_var($taxonomy), $taxonomy); // by 'slug', 'name', or 'id' 
+				if ( get_query_var( $taxonomy ) ) {
+					$term = get_term_by( 'slug', get_query_var( $taxonomy ), $taxonomy );
 				}
 				
 				if ( isset( $term->taxonomy ) ) {
-					$selected = get_term_link( $term, $term->taxonomy ); // For wp_dropdown_categories() with custom walker...
-				} else {
-					$term = get_queried_object(); // Fallback, just in case...
+					$selected = get_term_link( $term, $term->taxonomy );
+				}
+				else {
+					$term = get_queried_object();
 					if ( isset( $term->taxonomy ) ) {
 						$selected = get_term_link( $term, $term->taxonomy );
 					}
