@@ -42,7 +42,7 @@ class Mfields_Taxonomy_Widget extends WP_Widget {
 		'count'         => 0,
 		'display_title' => 1,
 		'hierarchical'  => 0,
-		'show_empty' 	=> 0, // Added to support hide_empty option...
+		'show_empty' 	=> 0,
 		'taxonomy'      => 'category',
 		'template'      => 'ul',
 		'title'         => '',
