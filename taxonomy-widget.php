@@ -380,16 +380,20 @@ class Mfields_Walker_Taxonomy_Dropdown extends Walker {
 	var $tree_type = 'category';
 
 	function start_el( &$output, $term, $depth, $args ) {
-		$url = get_term_link( $term, $term->taxonomy );
+
+		$selected_terms = array();
+		if ( isset( $args['selected'] ) ) {
+			$selected_terms = (array) $args['selected'];
+		}
 
 		$selected = '';
-		if ( $url == $args['selected'] ) {
+		if ( in_array( $term->slug, $selected_terms ) ) {
 			$selected .= ' selected="selected"';
 		}
 
 		$text = str_repeat( '&nbsp;', $depth * 3 ) . $term->name;
 		if ( $args['show_count'] ) {
-			$text .= '&nbsp;&nbsp;('. $term->count .')';
+			$text .= '&nbsp;&nbsp;(' . absint( $term->count ) . ')';
 		}
 		if ( $args['show_last_update'] ) {
 			$text .= '&nbsp;&nbsp;' . gmdate( __( 'Y-m-d', 'mfields-taxonomy-widget' ), $term->last_update_timestamp );
@@ -397,6 +401,6 @@ class Mfields_Walker_Taxonomy_Dropdown extends Walker {
 
 		$class_name = 'level-' . $depth;
 
-		$output.= "\t" . '<option' . $selected . ' class="' . esc_attr( $class_name ) . '" value="' . esc_url( $url ) . '">' . esc_html( $text ) . '</option>' . "\n";
+		$output.= "\t" . '<option' . $selected . ' class="' . esc_attr( $class_name ) . '" value="' . esc_url( get_term_link( $term, $term->taxonomy ) ) . '">' . esc_html( $text ) . '</option>' . "\n";
 	}
 }
