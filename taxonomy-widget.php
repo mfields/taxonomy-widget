@@ -22,6 +22,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 
+/**
+ * Load Plugin Text Domain.
+ *
+ * @access    private
+ * @since     0.7
+ */
+function mfields_taxonomy_widget_textdomain() {
+	load_plugin_textdomain( 'mfields-taxonomy-widget', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+}
+add_action( 'init', 'mfields_taxonomy_widget_textdomain' );
+
+
 function mfields_taxonomy_widget_register() {
 	$taxonomies = get_taxonomies( array( 'public' => true ), 'objects' );
 	if ( empty( $taxonomies ) ) {
