@@ -1,6 +1,6 @@
 === Taxonomy Widget ===
 
-Contributors: mfields
+Contributors: mfields, bigevilbrain
 Donate link: http://wordpress.mfields.org/donate/
 Tags: taxonomy, tag, category, widget, cloud, dropdown
 Requires at least: 3.2
@@ -52,6 +52,9 @@ I've released a handfull of plugins dealing with taxonomies. Please see my [plug
 
 
 ==Changelog==
+
+= NEXT =
+* Recognize when multiple terms are queried simultaneously.
 
 = 0.6.1 =
 * Set value of the "taxonomies" property a bit later in the action sequence. 
