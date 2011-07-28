@@ -229,12 +229,12 @@ EOF;
 		}
 
 		$taxonomy_args = apply_filters( 'mfields_taxonomy_widget_args_global', array(
-			'hierarchical' => $hierarchical,
-			'orderby'      => 'name',
-			'show_count'   => $count,
-			'hide_empty'   => !($show_empty), // Checkbox is off by default, but hide_empty should be true by default...
-			'use_desc_for_title'	=> false, // Hate this little used default setting!
-			'taxonomy'     => $taxonomy
+			'hierarchical'       => $hierarchical,
+			'orderby'            => 'name',
+			'show_count'         => $count,
+			'hide_empty'         => $show_empty,
+			'taxonomy'           => $taxonomy,
+			'use_desc_for_title' => false,
 			) );
 
 		switch ( $template ) {
