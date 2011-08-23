@@ -1,0 +1,89 @@
+# Copyright (C) 2011 Michael Fields
+# This file is distributed under the same license as the Taxonomy Widget package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Taxonomy Widget 0.6.1\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/taxonomy-widget\n"
+"POT-Creation-Date: 2011-07-28 12:32:29+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: taxonomy-widget.php:53
+msgid "Taxonomy"
+msgstr ""
+
+#: taxonomy-widget.php:55
+msgid "Create a list, dropdown or term cloud of any taxonomy."
+msgstr ""
+
+#: taxonomy-widget.php:60
+msgid "Cloud"
+msgstr ""
+
+#: taxonomy-widget.php:61
+msgid "Dropdown"
+msgstr ""
+
+#: taxonomy-widget.php:62
+msgid "Ordered List"
+msgstr ""
+
+#: taxonomy-widget.php:63
+msgid "Unordered List"
+msgstr ""
+
+#: taxonomy-widget.php:210
+msgid "Taxonomy Widget Error"
+msgstr ""
+
+#: taxonomy-widget.php:212
+msgid "Term clouds are not supported for &#8220;%1$s&#8221;."
+msgstr ""
+
+#: taxonomy-widget.php:215
+msgid "Term clouds are not supported for this taxonomy."
+msgstr ""
+
+#: taxonomy-widget.php:243
+msgid "Please Choose"
+msgstr ""
+
+#: taxonomy-widget.php:302
+msgid "Title:"
+msgstr ""
+
+#: taxonomy-widget.php:309
+msgid "Choose Taxonomy to Display:"
+msgstr ""
+
+#: taxonomy-widget.php:321
+msgid "Display Taxonomy As:"
+msgstr ""
+
+#: taxonomy-widget.php:329
+msgid "Advanced Options"
+msgstr ""
+
+#: taxonomy-widget.php:335
+msgid "Show Title"
+msgstr ""
+
+#: taxonomy-widget.php:341
+msgid "Show post counts"
+msgstr ""
+
+#: taxonomy-widget.php:347
+msgid "Show hierarchy"
+msgstr ""
+
+#: taxonomy-widget.php:377
+msgid "Y-m-d"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Taxonomy Widget"
+msgstr ""

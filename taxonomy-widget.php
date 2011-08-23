@@ -7,6 +7,8 @@ Version:        0.6.1
 Author:         Michael Fields
 Author URI:     http://wordpress.mfields.org/
 
+Text domain: mfields-taxonomy-widget
+
 Copyright 2009-2011  Michael Fields  michael@mfields.org
 
 This program is free software; you can redistribute it and/or modify
